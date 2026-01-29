@@ -1,0 +1,14 @@
+@use 'mixins/mixins.scss' as *;
+
+@include b(icon) {
+  display: inline-block;
+  height: 1em;
+  width: 1em;
+  vertical-align: middle;
+  border: 1px solid skyblue;
+  svg {
+    height: 1em;
+    width: 1em;
+    fill: currentColor; /* 关键：让 SVG 的填充颜色等于父级的 color 属性 */
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "name": "vue3-component",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "pnpm -C play dev",
+    "doc:dev": "pnpm -C docs dev"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.27.0",
+  "dependencies": {
+    "@x-future/components": "workspace:*",
+    "@x-future/theme-chalk": "workspace:*",
+    "@x-future/utils": "workspace:*",
+    "sass": "^1.97.3",
+    "typescript": "^5.9.3",
+    "unplugin-vue-define-options": "^3.1.2",
+    "vue": "^3.5.27"
+  },
+  "devDependencies": {
+    "@vue/eslint-config-typescript": "^14.6.0",
+    "eslint": "^9.39.2",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.5",
+    "prettier": "^3.8.1",
+    "ts-node": "^10.9.2",
+    "vitepress": "^1.6.4"
+  }
+}

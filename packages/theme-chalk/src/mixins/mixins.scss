@@ -1,0 +1,44 @@
+@use 'config' as *;
+@forward 'config';
+
+// bem负责生成绑定在元素上面的类名, 这些scss负责生成指定类名的样式,二者得对应起来才行
+// .mushroom-button
+@mixin b($block) {
+  $B: $namespace + '-' + $block;
+  .#{$B} {
+    @content;
+  }
+}
+
+// .mushroom-button.is-xxx
+@mixin when($state) {
+  @at-root {
+    &.#{$state-prefix + $state} {
+      @content;
+    }
+  }
+}
+
+// &--primary => .mushroom-button--primary
+@mixin m($modifier) {
+  @at-root {
+    #{& + $modifier-separator + $modifier} {
+      @content;
+    }
+  }
+}
+
+// &__header => .mushroom-button__header
+@mixin e($element) {
+  @at-root {
+    #{& + $element-separator + $element} {
+      @content;
+    }
+  }
+}
+
+@mixin button-variant($color, $background-color, $border-color) {
+  color: $color;
+  background: $background-color;
+  border-color: $border-color;
+}
