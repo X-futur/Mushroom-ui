@@ -6,6 +6,11 @@
   width: 1em;
   vertical-align: middle;
   border: 1px solid skyblue;
+  justify-content: center;
+  align-items: center;
+
+  line-height: 1; // 消除行高对高度的影响,居中关键
+
   svg {
     height: 1em;
     width: 1em;
