@@ -40,7 +40,7 @@ import MIcon from '@x-future/components/icon'
 import { computed } from 'vue'
 
 defineOptions({
-  name: 'NTreeNode'
+  name: 'MTreeNode'
 })
 
 const props = defineProps(TreeNodeProps)

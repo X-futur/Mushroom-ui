@@ -1,6 +1,22 @@
-module.exports = {
+// docs/.vitepress/config.js
+import { defineConfig } from 'vitepress'
+import {
+  containerPreview,
+  componentPreview
+} from '@vitepress-demo-preview/plugin'
+
+export default defineConfig({
   title: 'Mushroom-UI',
   description: 'Mushroom UI',
+  markdown: {
+    config(md) {
+      // 注册 demo 预览插件
+      md.use(containerPreview)
+      md.use(componentPreview)
+    },
+    // 确保 markdown 代码块能够正确解析
+    languages: ['js', 'ts', 'vue', 'jsx', 'tsx', 'json', 'markdown', 'yaml', 'bash', 'css', 'scss', 'html']
+  },
   themeConfig: {
     lastUpdated: '最后更新时间',
     docsDir: 'docs',
@@ -28,9 +44,13 @@ module.exports = {
       '/component/': [
         {
           text: '基础组件',
-          items: [{ text: 'Icon', link: '/component/icon' }]
+          items: [
+            { text: 'Icon', link: '/component/icon' },
+            { text: 'Button', link: '/component/button' },
+            { text: 'Tree', link: '/component/tree' }
+          ]
         }
       ]
     }
   }
-}
+})

@@ -8,6 +8,14 @@
     v-model:selected-keys="value"
     selectable
   ></m-tree>
+  <m-button size="medium" type="danger" :round="true">
+    按钮
+    <template #icon>
+      <m-icon size="20">
+        <AddCircle></AddCircle>
+      </m-icon>
+    </template>
+  </m-button>
 </template>
 
 <script setup lang="ts">

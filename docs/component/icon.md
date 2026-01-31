@@ -10,21 +10,7 @@ pnpm install @vicons/ionicons5
 
 - 如果你想像用例一样直接在项目中使用图标，你需要全局注册组件
 
-<script setup lang="ts">
-import { CashOutline } from '@vicons/ionicons5'
-</script>
-
-<m-icon color="#bfc" size="40">
-    <CashOutline />
-</m-icon>
-
-<m-icon color="skyblue" size="50">
-    <CashOutline />
-</m-icon>
-
-<m-icon color="pink" size="60">
-    <CashOutline />
-</m-icon>
+::: demo
 
 ```vue
 <script setup lang="ts">
@@ -35,8 +21,16 @@ import { CashOutline } from '@vicons/ionicons5'
   <m-icon color="#bfc" size="40">
     <CashOutline />
   </m-icon>
+  <m-icon color="skyblue" size="50">
+    <CashOutline />
+  </m-icon>
+  <m-icon color="pink" size="60">
+    <CashOutline />
+  </m-icon>
 </template>
 ```
+
+:::
 
 ## API
 
