@@ -4,6 +4,7 @@ import {
   containerPreview,
   componentPreview
 } from '@vitepress-demo-preview/plugin'
+import path from 'path'
 
 export default defineConfig({
   title: 'Mushroom-UI',
@@ -15,7 +16,20 @@ export default defineConfig({
       md.use(componentPreview)
     },
     // 确保 markdown 代码块能够正确解析
-    languages: ['js', 'ts', 'vue', 'jsx', 'tsx', 'json', 'markdown', 'yaml', 'bash', 'css', 'scss', 'html']
+    languages: [
+      'js',
+      'ts',
+      'vue',
+      'jsx',
+      'tsx',
+      'json',
+      'markdown',
+      'yaml',
+      'bash',
+      'css',
+      'scss',
+      'html'
+    ]
   },
   themeConfig: {
     lastUpdated: '最后更新时间',
@@ -51,6 +65,18 @@ export default defineConfig({
           ]
         }
       ]
+    }
+  },
+  vite: {
+    resolve: {
+      alias: {
+        // 确保 Vite 能找到组件库源码
+        '@x-future': path.resolve(__dirname, '../../packages')
+      }
+    },
+    ssr: {
+      // 关键配置：防止 VitePress 在服务端渲染时将你的组件库视为外部依赖
+      noExternal: ['@x-future/components', '@vitepress-demo-preview/component']
     }
   }
 })

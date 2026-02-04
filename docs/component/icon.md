@@ -1,32 +1,31 @@
 # Icon 图标
 
-推荐使用 xicons 作为图表库
+基于 SVG 的图标容器，支持自定义颜色、大小，并能与第三方图标库（如 `ionicons5`）无缝集成。
 
-```
-pnpm install @vicons/ionicons5
-```
+## 基础用法
 
-## 使用图标
+可以直接设置 `color` 和 `size` 属性。
 
-- 如果你想像用例一样直接在项目中使用图标，你需要全局注册组件
-
-::: demo
+<!-- prettier-ignore-->
+:::demo
 
 ```vue
 <script setup lang="ts">
-import { CashOutline } from '@vicons/ionicons5'
+import { AddCircle, AlarmOutline, BoatOutline } from '@vicons/ionicons5'
 </script>
 
 <template>
-  <m-icon color="#bfc" size="40">
-    <CashOutline />
-  </m-icon>
-  <m-icon color="skyblue" size="50">
-    <CashOutline />
-  </m-icon>
-  <m-icon color="pink" size="60">
-    <CashOutline />
-  </m-icon>
+  <div style="display: flex; gap: 20px; align-items: center;">
+    <m-icon color="#409eff" size="30">
+      <AddCircle />
+    </m-icon>
+    <m-icon color="#67c23a" size="40">
+      <AlarmOutline />
+    </m-icon>
+    <m-icon color="#f56c6c" size="50">
+      <BoatOutline />
+    </m-icon>
+  </div>
 </template>
 ```
 
@@ -34,9 +33,13 @@ import { CashOutline } from '@vicons/ionicons5'
 
 ## API
 
-Icon Props
+### Icon Props
 
-| 名称  | 类型            | 默认值    | 说明 |
-| ----- | --------------- | --------- | ---- |
-| color | string          | undefined | 颜色 |
-| size  | number\| string | undefined | 大小 |
+| 参数    | 说明                 | 类型                | 默认值 |
+| ------- | -------------------- | ------------------- | ------ |
+| `color` | 图标颜色             | `string`            | -      |
+| `size`  | 图标大小（单位：px） | `number` / `string` | -      |
+
+```
+
+```
