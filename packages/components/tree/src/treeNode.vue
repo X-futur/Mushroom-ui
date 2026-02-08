@@ -1,11 +1,7 @@
 <template>
-  <div
-    :class="[
-      bem.b(),
-      bem.is('selected', isSelected),
-      bem.is('disabled', node.disabled)
-    ]"
-  >
+  <!-- 外层div负责状态控制，整行的背景样式 -->
+  <div :class="[bem.b(), bem.is('disabled', node.disabled)]">
+    <!-- 内层div负责节点缩进样式 -->
     <div
       :class="bem.e('content')"
       :style="{ paddingLeft: `${node.level * 16}px` }"
@@ -23,7 +19,7 @@
           <Loading v-else></Loading>
         </m-icon>
       </span>
-      <span @click="handleSelected" :class="bem.e('label')">
+      <span :class="bem.e('label')">
         <m-tree-node-content :node="node"></m-tree-node-content>
       </span>
     </div>
@@ -51,18 +47,8 @@ const isLoading = computed(() => {
   return props.loadingKeys?.has(props.node.key)
 })
 
-const isSelected = computed(() => {
-  return props.selectedKeys?.includes(props.node.key)
-})
-
 // 点击折叠与否，传递信号给父组件，父组件进行操作
 function handleExpand() {
   emit('toggle', props.node)
-}
-
-// 点击选中，传递信号给父组件，父组件进行操作
-function handleSelected() {
-  if (props.node.disabled) return
-  emit('select', props.node)
 }
 </script>

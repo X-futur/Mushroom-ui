@@ -1,6 +1,7 @@
 <template>
   <div :class="bem.b()">
-    <m-virtual-list :items="flattenTree" :remain="8" :size="38">
+    <!-- 循环取到每个元素并渲染 -->
+    <m-virtual-list :items="flattenTree" :remain="5" :size="38">
       <template #default="{ node }">
         <m-tree-node
           :key="node.key"
@@ -8,25 +9,29 @@
           :expanded="isExpanded(node)"
           @toggle="toggleExpand"
           :loadingKeys="loadingKeysRefs"
-          @select="handleSelect"
-          :selectedKeys="selectedKeysRef"
         >
         </m-tree-node>
       </template>
     </m-virtual-list>
   </div>
+
+  <!-- 不使用虚拟列表 -->
+  <!-- <div :class="bem.b()">
+    <m-tree-node
+      v-for="node in flattenTree"
+      :key="node.key"
+      :node="node"
+      :expanded="isExpanded(node)"
+      @toggle="toggleExpand"
+      :loadingKeys="loadingKeysRefs"
+    >
+    </m-tree-node>
+  </div> -->
 </template>
 
 <script lang="ts" setup>
 import { computed, provide, ref, useSlots, watch } from 'vue'
-import {
-  Key,
-  treeEmits,
-  treeInjectKey,
-  TreeNode,
-  TreeOption,
-  treeProps
-} from './tree'
+import { Key, treeInjectKey, TreeNode, TreeOption, treeProps } from './tree'
 import { createNamespace } from '@x-future/utils/create'
 import MTreeNode from './treeNode.vue'
 import MVirtualList from '@x-future/components/virtual-list'
@@ -64,7 +69,9 @@ const treeOption = createOption(
   props.childrenField
 )
 
-// 通过格式化数据创建树
+// 通过格式化数据创建数据格式标准的树
+// 接口与分离，写成两层外部调用时不用考虑父节点，可以做一些只需要执行一次的操作（定义treeOption）
+// 内层做具体处理
 function createTree(data: TreeOption[], parent: TreeNode | null = null) {
   // 遍历数据，对用户输入的数据进行格式化，转为方便处理的数据结构
   function traversal(data: TreeOption[], parent: TreeNode | null = null) {
@@ -74,11 +81,14 @@ function createTree(data: TreeOption[], parent: TreeNode | null = null) {
         label: treeOption.getLabel(node),
         key: treeOption.getKey(node),
         children: [],
+        // 空值运算符，左侧为空则执行右侧
         isLeaf: node.isLeaf ?? children.length == 0,
+        // 强制转换为bool值
         disabled: !!node.disabled,
         level: parent ? parent.level + 1 : 0,
         rawNode: node
       }
+      // 递归标准化节点的孩子
       if (children.length > 0) {
         treeNode.children = traversal(children, treeNode)
       }
@@ -90,24 +100,27 @@ function createTree(data: TreeOption[], parent: TreeNode | null = null) {
   return result
 }
 
-// 收集需要展开的key
+// 定义集合收集需要展开的key
 const expandedKeySet = ref(new Set(props.defaultExpandedKeys))
 
 // 拍平树，利用栈实现深度优先拍平，一旦出栈，子节点全部入栈
+// 是计算属性，会根据expandedKeySet变化重新计算
 const flattenTree = computed(() => {
-  // 需要拍平的数组
+  // 需要拍平的数组，已展开的才需要拍平
   let expendedKeys = expandedKeySet.value
   // 拍平之后的结果
   let flattenNodes: TreeNode[] = []
-  // 用于处理的格式化之后的用户数据
+  // 格式化之后的用户数据
   const nodes = tree.value || []
   const stack: TreeNode[] = []
 
   // 栈中逆序存放节点，保证出栈时顺序正确
+  // 第一层
   for (let i = nodes.length - 1; i >= 0; i--) {
     stack.push(nodes[i])
   }
 
+  // 利用栈实现数组的DFS
   while (stack.length) {
     const node = stack.pop()
     if (!node) continue
@@ -129,67 +142,33 @@ function isExpanded(node: TreeNode): boolean {
   return expandedKeySet.value.has(node.key)
 }
 
+// 收折逻辑
 function collapse(node: TreeNode) {
   expandedKeySet.value.delete(node.key)
 }
 
+// 展开逻辑
 function expand(node: TreeNode) {
   expandedKeySet.value.add(node.key)
-  // 实现异步加载
-  triggerLoading(node)
+  // 这里可实现异步加载
 }
 
 // 存储已经在加载中的节点
 const loadingKeysRefs = ref(new Set<Key>())
-function triggerLoading(node: TreeNode) {
-  // 还没有子数据的父节点
-  if (!node.children.length && !node.isLeaf) {
-    const loadingKeys = loadingKeysRefs.value
-    // 防抖控制，判断节点是否在加载中，已经在就不会多次发送请求
-    if (!loadingKeys.has(node.key)) {
-      loadingKeys.add(node.key)
-      // 执行异步加载函数
-      const onLoad = props.onLoad
-      if (onLoad) {
-        onLoad(node.rawNode).then(children => {
-          node.rawNode.children = children
-          node.children = createTree(children, node)
-          loadingKeys.delete(node.key)
-        })
-      }
-    }
-  }
-}
 
+// 切换展开收起状态
 function toggleExpand(node: TreeNode) {
   const expandKeys = expandedKeySet.value
+  // 节点已展开且不在加载状态中
   if (expandKeys.has(node.key) && !loadingKeysRefs.value.has(node.key)) {
     collapse(node)
   } else {
+    // 未展开执行展开逻辑
     expand(node)
   }
 }
 
-const selectedKeysRef = ref<Key[]>([])
-const emit = defineEmits(treeEmits)
-function handleSelect(node: TreeNode) {
-  let keys = Array.from(selectedKeysRef.value)
-  // 如果不能选择，什么都不做
-  if (!props.selectable) return
-  // 单选模式
-  if (!props.multiple) {
-    // 选择的节点已经在了，清空数组，否则直接添加进去
-    if (keys.includes(node.key)) keys = []
-    else keys = [node.key]
-  } else {
-    // 多选模式，如果节点已经选中，则用过滤器过滤掉，否则添加节点进数组
-    if (keys.includes(node.key)) keys = keys.filter(key => key !== node.key)
-    else keys.push(node.key)
-  }
-
-  emit('update:selectedKeys', keys)
-}
-
+// 跨组件共享插槽内容
 provide(treeInjectKey, {
   slots: useSlots()
 })

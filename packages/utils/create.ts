@@ -31,29 +31,25 @@ function createBEM(prefixName: string) {
   // b即为拼接block
   const b = (blockSuffix: string = '') => _bem(prefixName, blockSuffix, '', '')
   // e即为拼接element
-  const e = (element: string) =>
-    element ? _bem(prefixName, '', element, '') : ''
+  const e = (element: string) => _bem(prefixName, '', element, '')
   // m即为拼接modifier
-  const m = (modifier: string) =>
-    modifier ? _bem(prefixName, '', '', modifier) : ''
+  const m = (modifier: string) => _bem(prefixName, '', '', modifier)
 
   const be = (blockSuffix: string, element: string) =>
-    blockSuffix && element ? _bem(prefixName, blockSuffix, element, '') : ''
+    _bem(prefixName, blockSuffix, element, '')
 
   const bm = (blockSuffix: string, modifier: string) =>
-    blockSuffix && modifier ? _bem(prefixName, blockSuffix, '', modifier) : ''
+    _bem(prefixName, blockSuffix, '', modifier)
 
   const em = (element: string, modifier: string) =>
-    modifier && element ? _bem(prefixName, '', element, modifier) : ''
+    _bem(prefixName, '', element, modifier)
 
   const bem = (blockSuffix: string, element: string, modifier: string) =>
-    blockSuffix && element && modifier
-      ? _bem(prefixName, blockSuffix, element, modifier)
-      : ''
+    _bem(prefixName, blockSuffix, element, modifier)
 
   const is = (name: string, state: string | boolean) =>
     state ? `is-${name}` : ''
-  // 返回一个对象,包含b/e两个方法
+  // 返回一个对象,包含所有的方法
   return { b, e, m, be, bm, em, bem, is }
 }
 

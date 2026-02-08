@@ -2,13 +2,14 @@
   <m-icon :color="'#bfa'" :size="50">
     <AddCircle></AddCircle>
   </m-icon>
-  <m-tree
-    :data="data"
-    :on-load="handleLoad"
-    v-model:selected-keys="value"
-    selectable
-  ></m-tree>
-  <m-button size="medium" type="danger" :round="true">
+
+  <m-button
+    size="large"
+    type="danger"
+    :round="true"
+    @click="clickButton"
+    @mousedown="mouseDown"
+  >
     按钮
     <template #icon>
       <m-icon size="20">
@@ -16,10 +17,13 @@
       </m-icon>
     </template>
   </m-button>
+
+  <m-tree :data="data"></m-tree>
 </template>
 
 <script setup lang="ts">
 import { AddCircle } from '@vicons/ionicons5'
+import Loading from '@x-future/components/internal-icon/Loading'
 import type { Key, TreeOption } from '@x-future/components/tree'
 import { ref } from 'vue'
 
@@ -48,27 +52,14 @@ function createLabel(level: number): string {
   return ''
 }
 
-const handleLoad = (node: TreeOption) => {
-  return new Promise<TreeOption[]>((resolve, reject) => {
-    setTimeout(() => {
-      resolve([
-        {
-          lable: nextLabel(node.label),
-          key: node.key + nextLabel(node.label),
-          isLeaf: false
-        }
-      ])
-    }, 1000)
-  })
+// 完成点击即触发（按下+抬起）
+function clickButton() {
+  console.log('you have clicked the button!')
 }
 
-function nextLabel(currentLabel?: string | number | undefined): string {
-  if (!currentLabel) return '道生一'
-  if (currentLabel == '道生一') return '一生二'
-  if (currentLabel == '一生二') return '二生三'
-  if (currentLabel == '二生三') return '三生万物'
-  if (currentLabel == '三生万物') return '道生一'
-  return ''
+// 完成按下即触发
+const mouseDown = () => {
+  console.log('your mouse is down!')
 }
 </script>
 

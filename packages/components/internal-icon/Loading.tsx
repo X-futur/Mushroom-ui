@@ -2,6 +2,7 @@ import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'MLoading',
+  // render函数返回虚拟DOM
   render() {
     return (
       <svg

@@ -23,6 +23,7 @@
   vertical-align: middle;
   padding: 0 20px;
 
+  // 采用标准盒模型，width由content padding border决定
   @include m(tiny) {
     padding: 0 15px;
   }
@@ -44,6 +45,14 @@
     &:hover,
     &:focus {
       cursor: not-allowed;
+    }
+  }
+
+  @include when(loading) {
+    // 选中 LoadingComponent.tsx 中定义的 .loading 类名
+    .loading {
+      // 旋转动画名称  一周期时间  匀速   无限旋转
+      animation: rotate 1.5s linear infinite;
     }
   }
 

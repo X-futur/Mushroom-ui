@@ -21,6 +21,7 @@ export interface TreeNode extends Required<TreeOption> {
 }
 
 // 定义属性配置
+// <m-tree label-field="'name'" ... /> 可在标签中自定义属性名，防止后端传入数据格式紊乱
 export const treeProps = {
   data: {
     type: Array as PropType<TreeOption[]>,
@@ -42,11 +43,7 @@ export const treeProps = {
     type: Array as PropType<Key[]>,
     default: () => []
   },
-  onload: Function as PropType<(node: TreeOption) => Promise<TreeOption[]>>,
-  selectable: {
-    type: Boolean,
-    default: true
-  },
+  onLoad: Function as PropType<(node: TreeOption) => Promise<TreeOption[]>>,
   multiple: {
     type: Boolean,
     deault: false
@@ -64,17 +61,12 @@ export const TreeNodeProps = {
   },
   loadingKeys: {
     type: Object as PropType<Set<Key>>
-  },
-  selectedKeys: {
-    type: Array as PropType<Array<Key>>,
-    default: () => []
   }
 } as const
 
 export const TreeNodeEmits = {
   // 校验两个事件必须传TreeNode类型的参数
-  toggle: (node: TreeNode) => node,
-  select: (node: TreeNode) => node
+  toggle: (node: TreeNode) => node
 }
 
 export const treeNodeContentProps = {
@@ -89,7 +81,3 @@ export interface TreeContext {
 }
 
 export const treeInjectKey: InjectionKey<TreeContext> = Symbol()
-
-export const treeEmits = {
-  'update:selectedKeys': (keys: Key[]) => keys
-}

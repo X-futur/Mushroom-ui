@@ -2,15 +2,15 @@
 import _Icon from './src/icon.vue'
 import withInstall from '@x-future/utils/withInstall'
 
-// 组件插件化导出
+// 组件加上install方法之后导出，作为全局组件
 const Icon = withInstall(_Icon)
+// 导出模块，方便按需使用，摇树优化提升性能
 export default Icon
 
-// 二次导出,统一导出入口,方便引用
-// 导出类型接口等
+// 导出组件的属性类型定义
 export * from './src/icon'
 
-// 使用vue时方便给提示
+// 确保在模板中使用 <m-icon> 时，IDE 能提供属性补全和类型检查
 // 扩展全局组件类型声明
 declare module 'vue' {
   export interface GlobalComponents {

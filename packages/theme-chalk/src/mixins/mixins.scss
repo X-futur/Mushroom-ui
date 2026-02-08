@@ -1,4 +1,5 @@
 @use 'config' as *;
+// 转发config模块，二次引入也可用config
 @forward 'config';
 
 // bem负责生成绑定在元素上面的类名, 这些scss负责生成指定类名的样式,二者得对应起来才行
@@ -21,6 +22,7 @@
 
 // &--primary => .mushroom-button--primary
 @mixin m($modifier) {
+  // 处理嵌套逻辑，提升到根级，跳出后代选择器
   @at-root {
     #{& + $modifier-separator + $modifier} {
       @content;
